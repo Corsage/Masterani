@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/episodeHolder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/episodePoster"
+        android:tint="@color/backgroundTranslucent"
+        android:contentDescription="Poster of an episode." />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/duration"
+        android:layout_gravity="start|top"
+        android:paddingStart="6dp"
+        android:paddingTop="6dp"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/textLight" />
+
+    <TextView
+        android:id="@+id/episodeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:layout_gravity="start|bottom"
+        android:textColor="@color/textLight"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/episodeNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:layout_gravity="end|bottom"
+        android:textColor="@color/textDark"
+        android:textStyle="bold" />
+
+</FrameLayout>

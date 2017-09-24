@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/posterHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/releasePoster"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:tint="@color/backgroundTranslucent" />
+
+        <TextView
+            android:id="@+id/releaseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:paddingTop="6dp"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/textLight" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/episodeNumber"
+            android:paddingStart="6dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp"
+            android:textStyle="bold"
+            android:textColor="@color/textDark" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/animeTitle"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:paddingEnd="6dp"
+            android:paddingBottom="6dp"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/textLight" />
+
+    </LinearLayout>
+
+</FrameLayout>

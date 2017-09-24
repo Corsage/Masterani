@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- MASTERAN.ME uses 50% opacity on the background -->
+    <solid android:color="#80000000"/>
+
+    <!-- MASTERANI.ME uses 5em border-radius which converts to 80.128sp -->
+    <corners
+        android:radius="80.128sp" />
+</shape>

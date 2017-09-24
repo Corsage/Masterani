@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="134dp"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
+
+    <FrameLayout
+        android:layout_width="134dp"
+        android:layout_height="192dp"
+        android:id="@+id/flGroup"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:descendantFocusability="blocksDescendants">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivAnimePoster"
+            android:contentDescription="Poster of the current anime." />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="start|top"
+            android:gravity="center_vertical"
+            android:descendantFocusability="blocksDescendants"
+            android:background="@drawable/background_score">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAnimeRating"
+                android:paddingEnd="1dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/textLight" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="1dp"
+                app:srcCompat="@drawable/ic_star" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvAnimeTitle"
+        android:layout_below="@id/flGroup"
+        android:layout_alignParentStart="true"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/textLight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvAnimeInfo"
+        android:layout_below="@+id/tvAnimeTitle"
+        android:layout_alignParentStart="true"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="10sp"
+        android:textColor="@color/textDark" />
+
+</RelativeLayout>
