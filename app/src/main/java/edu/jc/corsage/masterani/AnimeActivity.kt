@@ -7,17 +7,11 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import edu.jc.corsage.masterani.Fragments.AnimeFragment
 import edu.jc.corsage.masterani.Fragments.EpisodeFragment
-import edu.jc.corsage.masterani.Masterani.Entities.DetailedAnime
-import edu.jc.corsage.masterani.Masterani.Entities.DetailedEpisode
 import kotlinx.android.synthetic.main.activity_anime.*
-import java.util.ArrayList
-
-// TODO: Retrieve anime object here instead from intent. Due to large episodes sometimes...
 
 class AnimeActivity : AppCompatActivity() {
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-
-    private var anime: DetailedAnime? = null
+    private var ID: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +19,10 @@ class AnimeActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Retrieve anime object from intent.
-        anime = intent.extras.getParcelable("ANIME")
+        // Retrieve anime ID from intent.
+        ID = intent.extras.getInt("ID")
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
@@ -48,15 +42,14 @@ class AnimeActivity : AppCompatActivity() {
             when (position) {
                 0 -> {
                     val args = Bundle()
-                    args.putParcelable("ANIME", anime)
+                    args.putInt("ID", ID as Int)
                     fragment = AnimeFragment()
                     fragment.arguments = args
                     return fragment
                 }
                 1 -> {
                     val args = Bundle()
-                    args.putParcelableArrayList("EPISODES", anime?.episodes as ArrayList<DetailedEpisode>)
-                    args.putString("SLUG", anime?.info?.slug)
+                    args.putInt("ID", ID as Int)
                     fragment = EpisodeFragment()
                     fragment.arguments = args
                     return fragment

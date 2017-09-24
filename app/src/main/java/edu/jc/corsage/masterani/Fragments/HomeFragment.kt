@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.*
 import edu.jc.corsage.masterani.Adapters.AnimeAdapter
 import edu.jc.corsage.masterani.Adapters.PopularAdapter
+import edu.jc.corsage.masterani.AnimeActivity
 import edu.jc.corsage.masterani.Masterani.Collection.Order
 import edu.jc.corsage.masterani.Sayonara.Sayonara
 import edu.jc.corsage.masterani.WatchActivity
@@ -116,7 +117,9 @@ class HomeFragment() : Fragment(), View.OnClickListener {
             R.id.searchItem, R.id.popularMain -> {
                 // Only id is needed to create url.
                 val id = view.tag as Int
-                masterani.getSpecificAnime(mWeakContext, id)
+                val intent = Intent(context, AnimeActivity::class.java)
+                intent.putExtra("ID", id)
+                context.startActivity(intent)
             }
         }
     }

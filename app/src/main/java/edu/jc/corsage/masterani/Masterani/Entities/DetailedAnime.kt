@@ -8,15 +8,33 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
- * Created by j3chowdh on 9/11/2017.
+ * TODO: Refactor this piece of shit.
  */
+
+@Parcelize
+class DetailedAnimeEpisodes(val info: InfoEpisode, val episodes: List<DetailedEpisode>) : Parcelable
+
+@Parcelize
+class InfoEpisode(val slug: String): Parcelable
+
+@Parcelize
+class AnimeSearch(val id: Int,
+             val title: String,
+             val started_airing_date: String?,
+             val type: Int) : Parcelable {
+
+    val getInfoText: String?
+        get() {
+            // TYPE YEAR
+            return Type(type).toString() + " " + started_airing_date
+        }
+}
 
 @Parcelize
 class DetailedAnime(val info: Info,
                     val poster: String? = null,
                     val genres: List<Genre>?,
-                    val wallpapers: List<Wallpaper>?,
-                    val episodes: List<DetailedEpisode>) : Parcelable {
+                    val wallpapers: List<Wallpaper>?) : Parcelable {
 
     val getPoster: String?
         get() {
@@ -37,22 +55,8 @@ class DetailedAnime(val info: Info,
         }
 
     @Parcelize
-    class Search(val id: Int,
-                 val title: String,
-                 val started_airing_date: String?,
-                 val type: Int) : Parcelable {
-
-        val getInfoText: String?
-            get() {
-                // TYPE YEAR
-                return Type(type).toString() + " " + started_airing_date
-            }
-    }
-
-    @Parcelize
     class Info(val id: Int,
                val title: String,
-               val slug: String,
                val synopsis: String,
                val status: Int,
                val type: Int,

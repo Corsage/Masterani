@@ -10,8 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import edu.jc.corsage.masterani.Adapters.EpisodeAdapter
 import edu.jc.corsage.masterani.Masterani.Entities.DetailedEpisode
+import edu.jc.corsage.masterani.Masterani.Masterani
 import edu.jc.corsage.masterani.R
 import edu.jc.corsage.masterani.Sayonara.Sayonara
 import edu.jc.corsage.masterani.WatchActivity
@@ -29,23 +32,20 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.view_episode, container, false)
-        episodes = arguments.getParcelableArrayList("EPISODES")
-        slug = arguments.getString("SLUG")
+        EpisodeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arguments.getInt("ID"))
 
         return view
     }
 
     // Wait until view is created in order to populate listview.
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        episodeAdapter = EpisodeAdapter(context, episodes)
-        episodeListView.adapter = episodeAdapter
         episodeListView.onItemClickListener = this
     }
 
     override fun onItemClick(parent: AdapterView<*>?, v: View?, pos: Int, id: Long) {
         val info = v?.tag as DetailedEpisode.Info?
 
-        ShowEpisode(slug, info?.episode!!.toInt()).execute()
+        ShowEpisode(slug, info?.episode!!.toInt()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     // Handling actions.
@@ -70,6 +70,19 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
         override fun onPostExecute(result: Intent?) {
             progressDialog?.dismiss()
             context.startActivity(result)
+        }
+    }
+
+    inner class EpisodeUtil : AsyncTask<Int?, Unit, Unit>() {
+        override fun doInBackground(vararg p0: Int?) {
+            val temp = Masterani().getSpecificAnimeEpisodes(p0[0])
+            episodes = temp.episodes
+            slug = temp.info.slug
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            episodeAdapter = EpisodeAdapter(context, episodes)
+            episodeListView.adapter = episodeAdapter
         }
     }
 }

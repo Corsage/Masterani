@@ -1,17 +1,13 @@
 package edu.jc.corsage.masterani.Masterani
 
-import android.content.Context
 import android.os.AsyncTask
-import android.util.Log
 import edu.jc.corsage.masterani.Adapters.SearchAdapter
 import edu.jc.corsage.masterani.Masterani.Collection.Order
 import edu.jc.corsage.masterani.Masterani.Collection.Status
 import edu.jc.corsage.masterani.Masterani.Collection.Type
 import edu.jc.corsage.masterani.Masterani.Entities.*
-import edu.jc.corsage.masterani.Utils.AnimeUtil
 import edu.jc.corsage.masterani.Utils.SearchUtil
 import edu.jc.corsage.masterani.Utils.WebUtil
-import java.lang.ref.WeakReference
 
 /**
  * Created by j3chowdh on 9/9/2017.
@@ -87,16 +83,16 @@ class Masterani {
                 .get() as Popular
     }
 
-    fun getSpecificAnime(mWeakContext: WeakReference<Context>?, id: Int) {
-        // 1) retrieve anime.
-       val anime  = WebUtil("ANIME")
-                    .execute(String.format(DETAILED_ANIME_URL, id))
+    fun getSpecificAnime(id: Int?) : DetailedAnime {
+        return  WebUtil("ANIME")
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.format(DETAILED_ANIME_URL, id))
                     .get() as DetailedAnime
+    }
 
-        // 2) Create intent.
-        AnimeUtil(mWeakContext)
-                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, anime)
-
+    fun getSpecificAnimeEpisodes(id: Int?) : DetailedAnimeEpisodes {
+        return  WebUtil("ANIME_EPISODES")
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.format(DETAILED_ANIME_URL, id))
+                .get() as DetailedAnimeEpisodes
     }
 
     // Returns searched anime results.

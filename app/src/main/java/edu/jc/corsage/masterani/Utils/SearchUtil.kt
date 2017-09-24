@@ -46,15 +46,15 @@ class SearchUtil(val adapter: SearchAdapter?) : AsyncTask<String, Void, MatrixCu
         Log.d("WebUtil", "[SUCCESS] Retrieved data.")
 
         /* Parse JSON object */
-        type = Types.newParameterizedType(List::class.java, DetailedAnime.Search::class.java)
-        adapter = moshi.adapter<JsonAdapter<List<DetailedAnime.Search>>>(type)
+        type = Types.newParameterizedType(List::class.java, AnimeSearch::class.java)
+        adapter = moshi.adapter<JsonAdapter<List<AnimeSearch>>>(type)
          //adapter.fromJson(data)
 
         // Create cursor.
         val cursor = MatrixCursor(columns)
 
         // Retrieve search results.
-        val suggestions = adapter.fromJson(data) as List<DetailedAnime.Search>
+        val suggestions = adapter.fromJson(data) as List<AnimeSearch>
 
         for (i in suggestions.indices) {
             val tmp = arrayOf(suggestions[i].id, suggestions[i].title, suggestions[i].getInfoText)

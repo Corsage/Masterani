@@ -52,6 +52,13 @@ class WebUtil(val object_type: String) : AsyncTask<String, Void, Any?>() {
                 return adapter.fromJson(data)
             }
 
+            // Anime episodes.
+            "ANIME_EPISODES" -> {
+                type = Types.newParameterizedType(DetailedAnimeEpisodes::class.java)
+                adapter = moshi.adapter<DetailedAnimeEpisodes>(type)
+                return adapter.fromJson(data)
+            }
+
             // Links.
             "LINK" -> {
                 type = Types.newParameterizedType(List::class.java, Link::class.java)
