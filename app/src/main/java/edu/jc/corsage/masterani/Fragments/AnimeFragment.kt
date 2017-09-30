@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import edu.jc.corsage.masterani.Masterani.Entities.DetailedAnime
 import edu.jc.corsage.masterani.Masterani.Masterani
 import edu.jc.corsage.masterani.R
+import me.chensir.expandabletextview.ExpandableTextView
 import org.w3c.dom.Text
 
 /**
@@ -29,7 +30,7 @@ class AnimeFragment : Fragment() {
     private lateinit var type: TextView
     private lateinit var tvStatus: TextView
     private lateinit var ageRating: TextView
-    private lateinit var synopsis: TextView
+    private lateinit var synopsis: ExpandableTextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.view_anime, container, false)

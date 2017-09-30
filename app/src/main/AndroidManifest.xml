@@ -26,7 +26,7 @@
 
         <activity
             android:name=".AnimeActivity"
-            android:label="AnimeActivity"
+            android:label="Masterani"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -37,7 +37,7 @@
         <activity
             android:name=".WatchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_watch"
+            android:label="Masterani"
             android:launchMode="singleTop"
             android:theme="@style/FullscreenTheme"
             android:windowSoftInputMode="stateHidden" />
