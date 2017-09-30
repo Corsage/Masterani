@@ -38,18 +38,16 @@ class AnimeActivity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment? {
             // getItem is called to instantiate the fragment for the given page.
             var fragment: Fragment? = null
+            val args = Bundle()
+            args.putInt("ID", ID as Int)
 
             when (position) {
                 0 -> {
-                    val args = Bundle()
-                    args.putInt("ID", ID as Int)
                     fragment = AnimeFragment()
                     fragment.arguments = args
                     return fragment
                 }
                 1 -> {
-                    val args = Bundle()
-                    args.putInt("ID", ID as Int)
                     fragment = EpisodeFragment()
                     fragment.arguments = args
                     return fragment
