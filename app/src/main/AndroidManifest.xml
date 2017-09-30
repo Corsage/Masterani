@@ -15,7 +15,6 @@
         <!-- TODO: Fix activity for orientation change. -->
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

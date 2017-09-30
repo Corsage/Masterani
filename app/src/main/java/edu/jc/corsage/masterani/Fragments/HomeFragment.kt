@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.widget.ContentLoadingProgressBar
-import android.widget.GridView
 import edu.jc.corsage.masterani.Adapters.ReleaseAdapter
 import edu.jc.corsage.masterani.Masterani.Masterani
 import edu.jc.corsage.masterani.R
@@ -14,14 +12,9 @@ import kotlinx.android.synthetic.main.view_home.*
 import android.support.v7.widget.*
 import android.util.Log
 import android.view.*
-import edu.jc.corsage.masterani.Adapters.AnimeAdapter
 import edu.jc.corsage.masterani.Adapters.PopularAdapter
 import edu.jc.corsage.masterani.AnimeActivity
-import edu.jc.corsage.masterani.Masterani.Collection.Order
-import edu.jc.corsage.masterani.Sayonara.Sayonara
-import edu.jc.corsage.masterani.WatchActivity
 import java.lang.ref.WeakReference
-
 
 /**
  * This fragment is the default fragment which will be shown when the application starts.
@@ -29,9 +22,10 @@ import java.lang.ref.WeakReference
  * 1) Recenty released anime episode.
  * 2) Current popular anime.
  * 3) Most watched anime.
+ * 4) TODO: Favorites/Recently viewed...
  */
 
-class HomeFragment() : Fragment(), View.OnClickListener {
+class HomeFragment : Fragment(), View.OnClickListener {
     private val masterani = Masterani()
 
     /* Newest Episodes */
@@ -60,41 +54,19 @@ class HomeFragment() : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.view_home, container, false)
 
-        /* Newest Episodes */
         newestEps = view?.findViewById(R.id.releasesContainer)
-
-        newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        newestEps?.layoutManager = newestEpslayoutManager
-
-        episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
-        newestEps?.adapter = episodeAdapter
-
-        epsSnapHelper.attachToRecyclerView(newestEps)
-
-        /* Trending Anime */
-
-        // Being Watched
         beingWatched = view?.findViewById(R.id.beingWatchedList)
-
-        beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-        beingWatched?.layoutManager = beingWatchedLayoutManager
-
-        beingWatchedAdapter = PopularAdapter(context, this, getTodayStats.being_watched)
-        beingWatched?.adapter = beingWatchedAdapter
-
-        // Popular Today
         popularToday = view?.findViewById(R.id.popularTodayList)
 
-        popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-        popularToday?.layoutManager = popularTodayLayoutManager
-
-        popularTodayAdapter = PopularAdapter(context, this, getTodayStats.popular_today)
-        popularToday?.adapter = popularTodayAdapter
+        HomeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        beingWatchedAdapter = PopularAdapter(context, this, getTodayStats.being_watched)
+        popularTodayAdapter = PopularAdapter(context, this, getTodayStats.popular_today)
+
         // set onClickListeners to the arrows in releases containers..
         backBtn.setOnClickListener(this)
         forwardBtn.setOnClickListener(this)
@@ -122,6 +94,31 @@ class HomeFragment() : Fragment(), View.OnClickListener {
                 context.startActivity(intent)
             }
         }
+    }
+
+     // HomeUtil AsyncTask
+     // Used to load information onto fragment without making the user wait for the UI to load all at once.
+    inner class HomeUtil : AsyncTask<Int?, Unit, Unit>() {
+        override fun doInBackground(vararg p0: Int?) {
+            newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
+
+            beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+
+            popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+        }
+
+         override fun onPostExecute(result: Unit?) {
+             newestEps?.layoutManager = newestEpslayoutManager
+             newestEps?.adapter = episodeAdapter
+             epsSnapHelper.attachToRecyclerView(newestEps)
+
+             beingWatched?.layoutManager = beingWatchedLayoutManager
+             beingWatched?.adapter = beingWatchedAdapter
+
+             popularToday?.layoutManager = popularTodayLayoutManager
+             popularToday?.adapter = popularTodayAdapter
+         }
     }
 }
 
