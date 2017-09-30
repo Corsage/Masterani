@@ -14,7 +14,7 @@ data class DetailedEpisode(val info: Info?, var thumbnail: String?) : Parcelable
             if (thumbnail != null) {
                 return Masterani.CDN.EPISODE_THUMBNAIL_URL + thumbnail
             }
-            return Masterani.CDN.EPISODE_DEFAULT_THUMBNAIL
+            return null
         }
 
     @Parcelize

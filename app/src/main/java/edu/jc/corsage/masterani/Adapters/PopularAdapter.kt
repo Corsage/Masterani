@@ -39,7 +39,7 @@ class PopularAdapter(val context: Context, val listener: View.OnClickListener, v
 
         Glide.with(context)
                 .load(releases[pos].getWallpaperURL)
-                //.apply(RequestOptions.placeholderOf(R.drawable.default_poster))
+                .apply(RequestOptions.placeholderOf(R.drawable.default_poster))
                 .into(prh.ivAnimePoster)
 
         prh.tvAnimeRating.text = releases[pos].total.toString()

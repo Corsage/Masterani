@@ -59,7 +59,7 @@ class ReleaseAdapter(val context: Context, val releases: ArrayList<Episode>) : R
 
         Glide.with(context)
                 .load(releases[pos].anime?.getWallpaperURL)
-                //.apply(placeholderOf(R.drawable.default_poster))
+                .apply(placeholderOf(R.drawable.default_poster))
                 .apply(centerCropTransform())
                 .into(rrh.releasePoster)
 

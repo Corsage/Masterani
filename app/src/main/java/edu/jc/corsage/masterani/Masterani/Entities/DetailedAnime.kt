@@ -47,7 +47,7 @@ class DetailedAnime(val info: Info,
 
     val getRandomWallpaper: String?
         get() {
-            if (wallpapers != null) {
+            if (wallpapers!!.isNotEmpty()) {
                 return Masterani.CDN.WALLPAPER_URL + wallpapers[Random().nextInt(wallpapers.size)].file
             } else {
                 return null

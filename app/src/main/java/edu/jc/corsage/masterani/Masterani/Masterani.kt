@@ -65,9 +65,6 @@ class Masterani {
 
         // Episode Thumbnail
         @JvmStatic val EPISODE_THUMBNAIL_URL = "https://cdn.masterani.me/episodes/"
-
-        // Default Episode Thumbnail
-        @JvmStatic val EPISODE_DEFAULT_THUMBNAIL = "https://www.masterani.me/static/img/placeholder/default_thumbnail.png"
     }
 
     /* Home Functions */

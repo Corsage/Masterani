@@ -47,6 +47,7 @@ class EpisodeAdapter(val context: Context, val episodeList: List<DetailedEpisode
 
         Glide.with(context)
                 .load(episodeList[pos].getThumbnail)
+                .apply(RequestOptions.placeholderOf(R.drawable.default_wallpaper))
                 .apply(RequestOptions.centerCropTransform())
                 .into(erh.episodePoster)
 

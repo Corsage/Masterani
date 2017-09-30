@@ -61,6 +61,7 @@ class AnimeFragment : Fragment() {
          override fun onPostExecute(result: Unit?) {
              Glide.with(context)
                      .load(anime.getRandomWallpaper)
+                     .apply(RequestOptions.placeholderOf(R.drawable.default_wallpaper))
                      .apply(RequestOptions.centerCropTransform())
                      .into(wallpaper)
 
