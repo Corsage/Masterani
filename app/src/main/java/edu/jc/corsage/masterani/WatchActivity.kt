@@ -150,8 +150,33 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         // while interacting with the UI.
     }
 
-    /* Player event listener */
+    override fun onDestroy() {
+        player?.release()
+        super.onDestroy()
+    }
 
+    // We use onResume to ensure that everything is hidden again after coming back to foreground.
+    override fun onResume() {
+        super.onResume()
+
+        mVisible = true
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        delayedHide(100)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
+        // are available.
+        delayedHide(100)
+    }
+
+    /* Player event listener */
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         if (playbackState == Player.STATE_BUFFERING) {
             videoLoadingBar?.visibility = View.VISIBLE
@@ -188,27 +213,6 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
 
     override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) {
 
-    }
-
-    // We use onResume to ensure that everything is hidden again after coming back to foreground.
-    override fun onResume() {
-        super.onResume()
-
-        mVisible = true
-    }
-
-    override fun onPostResume() {
-        super.onPostResume()
-        delayedHide(100)
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
     }
 
     private fun toggle() {
