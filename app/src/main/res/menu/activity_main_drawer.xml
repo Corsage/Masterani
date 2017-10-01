@@ -20,14 +20,16 @@
 
     <item android:title="Scrobblers">
         <menu>
-            <item
-                android:id="@+id/nav_mal"
-                android:icon="@drawable/ic_myanimelist"
-                android:title="MyAnimeList" />
-            <item
-                android:id="@+id/nav_kitsu"
-                android:icon="@drawable/ic_kitsu"
-                android:title="Kitsu" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_mal"
+                    android:icon="@drawable/ic_myanimelist"
+                    android:title="MyAnimeList" />
+                <item
+                    android:id="@+id/nav_kitsu"
+                    android:icon="@drawable/ic_kitsu"
+                    android:title="Kitsu" />
+            </group>
         </menu>
     </item>
 

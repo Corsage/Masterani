@@ -75,6 +75,7 @@
             app:expandDrawable="@drawable/ic_arrow_down"
             app:contentTextColor="@color/textLight"
             app:expandText=""
+            app:collapseText=""
             app:maxCollapsedLines="6" />
 
     </RelativeLayout>

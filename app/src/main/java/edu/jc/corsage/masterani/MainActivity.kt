@@ -6,6 +6,7 @@ import android.provider.BaseColumns
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
@@ -13,18 +14,41 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ExpandableListView
+import edu.jc.corsage.masterani.Adapters.Menu.ExpandedMenuModel
+import edu.jc.corsage.masterani.Adapters.Menu.SortMenuAdapter
 import edu.jc.corsage.masterani.Adapters.SearchAdapter
-import edu.jc.corsage.masterani.Fragments.HomeFragment
-import edu.jc.corsage.masterani.Fragments.SortFragment
+import edu.jc.corsage.masterani.Fragments.*
 import edu.jc.corsage.masterani.Masterani.Masterani
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+    /* Fragments */
     private var homeFragment: HomeFragment? = null
+
+    private var favoriteFragment: FavoriteFragment? = null
     private var sortFragment: SortFragment? = null
-    private var masterani: Masterani? = null
+    private var scheduleFragment: ScheduleFragment? = null
+
+    private var malFragment: MALFragment? = null
+    private var kitsuFragment: KitsuFragment? = null
+
+    private var settingFragment: SettingFragment? = null
+
+    /* Sort Navigation Sub Menu */
+    private var mDrawerLayout: DrawerLayout? = null
+    private var mMenuAdapter: SortMenuAdapter? = null
+    private var expandableList: ExpandableListView? = null
+
+    private var listDataHeader: MutableList<ExpandedMenuModel> = ArrayList<ExpandedMenuModel>()
+    private var listDataChild: HashMap<ExpandedMenuModel, List<String>> = HashMap<ExpandedMenuModel, List<String>>()
+
+    /* Adapters */
     private var suggestionAdapter: SearchAdapter? = null
+
+    /* Masterani */
+    private var masterani: Masterani? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +84,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                     .add(R.id.fragment_container, homeFragment).commit()
         }
+
+        /* TEST: SORT SUB MENU ITEMS */
+        //mDrawerLayout = findViewById(R.id.drawer_layout)
+        //expandableList = findViewById(R.id.navigationmenu)
+
+        //prepareSortSubMenu()
+        //mMenuAdapter = SortMenuAdapter(this, listDataHeader, listDataChild, expandableList as ExpandableListView)
+
+        //expandableList?.setAdapter(mMenuAdapter)
+    }
+
+    // Used for setting up Sort sub menu items.
+    private fun prepareSortSubMenu() {
+        val item1 = ExpandedMenuModel()
+        item1.setIconName("heading1")
+        item1.setIconImg(android.R.drawable.ic_delete)
+        // Adding data header
+        listDataHeader.add(item1)
+
+        val item2 = ExpandedMenuModel()
+        item2.setIconName("heading2")
+        item2.setIconImg(android.R.drawable.ic_delete)
+        listDataHeader.add(item2)
+
+        val item3 = ExpandedMenuModel()
+        item3.setIconName("heading3")
+        item3.setIconImg(android.R.drawable.ic_delete)
+        listDataHeader.add(item3)
+
+        // Adding child data
+        val heading1 = ArrayList<String>()
+        heading1.add("Submenu of item 1")
+
+        val heading2 = ArrayList<String>()
+        heading2.add("Submenu of item 2")
+        heading2.add("Submenu of item 2")
+        heading2.add("Submenu of item 2")
+
+        listDataChild.put(listDataHeader[0], heading1) // Header, Child data
+        listDataChild.put(listDataHeader[1], heading2)
     }
 
     override fun onBackPressed() {
@@ -94,8 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         Log.d("onCreateOptionsMenu", "id for search is : " + R.id.animeSearch.toString())
 
-        val columns = arrayOf(BaseColumns._ID,
-                "title", "info")
+        val columns = arrayOf(BaseColumns._ID, "title", "info")
 
         val cursor = MatrixCursor(columns)
 
@@ -121,9 +184,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
+        // TODO: Properly utilize addToBackStack.
         when (item.itemId) {
             R.id.nav_favorite -> {
-
+                if (favoriteFragment == null) {
+                    favoriteFragment = FavoriteFragment()
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, favoriteFragment)
+                        .addToBackStack(null)
+                        .commit()
             }
             R.id.nav_sort -> {
                 if (sortFragment == null) {
@@ -135,16 +205,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .commit()
             }
             R.id.nav_schedule -> {
-
+                if (scheduleFragment == null) {
+                    scheduleFragment = ScheduleFragment()
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, scheduleFragment)
+                        .addToBackStack(null)
+                        .commit()
             }
             R.id.nav_mal -> {
-
+                if (malFragment == null) {
+                    malFragment = MALFragment()
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, malFragment)
+                        .addToBackStack(null)
+                        .commit()
             }
             R.id.nav_kitsu -> {
-
+                if (kitsuFragment == null) {
+                    kitsuFragment = KitsuFragment()
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, kitsuFragment)
+                        .addToBackStack(null)
+                        .commit()
             }
             R.id.nav_settings -> {
-
+                if (settingFragment == null) {
+                    settingFragment = SettingFragment()
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, settingFragment)
+                        .addToBackStack(null)
+                        .commit()
             }
         }
 
