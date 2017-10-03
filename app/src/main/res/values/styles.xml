@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceScreen</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,6 +28,16 @@
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <!-- Preferences (Settings) Theme -->
+    <style name="PreferenceScreen" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/textDark</item>
+        <item name="android:textColorPrimary">@color/textLight</item>
+        <item name="colorPrimary">#ff0000</item>
+        <item name="colorPrimaryDark">#ff0000</item>
+        <item name="colorAccent">#ff0000</item>
+        <item name="android:background">@color/backgroundPrimary</item>
     </style>
 
 </resources>
