@@ -9,26 +9,31 @@
             android:icon="@drawable/ic_favorite"
             android:title="Favorites" />
         <item
-            android:id="@+id/nav_sort"
-            android:icon="@drawable/ic_sort"
-            android:title="Sort" />
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home"
+            android:checked="true" />
         <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_schedule"
             android:title="Schedule" />
+        <item
+            android:id="@+id/nav_sort"
+            android:icon="@drawable/ic_sort"
+            android:title="Sort" />
     </group>
 
     <item android:title="Scrobblers">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_mal"
-                    android:icon="@drawable/ic_myanimelist"
-                    android:title="MyAnimeList" />
-                <item
                     android:id="@+id/nav_kitsu"
                     android:icon="@drawable/ic_kitsu"
                     android:title="Kitsu" />
+                <item
+                    android:id="@+id/nav_mal"
+                    android:icon="@drawable/ic_myanimelist"
+                    android:title="MyAnimeList" />
             </group>
         </menu>
     </item>
