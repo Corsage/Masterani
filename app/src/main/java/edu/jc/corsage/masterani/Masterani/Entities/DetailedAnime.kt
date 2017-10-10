@@ -15,7 +15,7 @@ import java.util.*
 class DetailedAnimeEpisodes(val info: InfoEpisode, val episodes: List<DetailedEpisode>) : Parcelable
 
 @Parcelize
-class InfoEpisode(val slug: String): Parcelable
+class InfoEpisode(val slug: String, val episode_count: Int?, val episode_length: Int?): Parcelable
 
 @Parcelize
 class AnimeSearch(val id: Int,

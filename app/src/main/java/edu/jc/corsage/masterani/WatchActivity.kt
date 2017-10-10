@@ -1,13 +1,19 @@
 package edu.jc.corsage.masterani
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -17,22 +23,42 @@ import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_watch.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.LoopingMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView
+import edu.jc.corsage.masterani.Sayonara.Sayonara
+import java.net.*
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
+ * TODO: REFACTOR FOR NEXT EPISODE FUNCTIONALITY
  */
-class WatchActivity : AppCompatActivity(), Player.EventListener {
+class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickListener {
     private var player: SimpleExoPlayer? = null
     private var simpleExoPlayerView: SimpleExoPlayerView? = null
 
     private var videoLoadingBar: ContentLoadingProgressBar? = null
+    private var nextEpisodeView: LinearLayout? = null
+    private var btnNextEpisodeStop: Button? = null
 
     private var mURL: String? = null
+
+    // TEST NEXT EPISODE IMPLEMENTATION
+    private var mSlug: String? = null
+    private var mCurrentEpisode: Int? = null
+    private var mEpisodeCount: Int? = null
+
+    private var dataSourceFactory : DefaultDataSourceFactory? = null
+    private var extractorsFactory : DefaultExtractorsFactory? = null
+    private var videoSource : ExtractorMediaSource? = null
+
+    private var url : Uri? = null
+    private lateinit var context : Context
+    private lateinit var countDownTimer : CountDownTimer
+
+    // TEST
+    private lateinit var DEFAULT_COOKIE_MANAGER : CookieManager
 
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
@@ -74,9 +100,22 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         if (intent != null) {
             mURL = intent.getStringExtra("URL")
             Log.d("WatchActivity", "Recieved link: " + mURL)
+
+            // TEST NEXT EPISODE IMPLEMENTATION
+            mSlug = intent.getStringExtra("SLUG")
+            mCurrentEpisode = intent.getIntExtra("CURRENT_EPISODE", -1)
+            mEpisodeCount = intent.getIntExtra("EPISODE_COUNT", -1)
         }
 
         mVisible = true
+
+        // TEST NEXT EPISODE IMPLETMENTATION
+        nextEpisodeView = findViewById(R.id.nextEpisode)
+
+        btnNextEpisodeStop = findViewById(R.id.btnNextEpisodeStop)
+        btnNextEpisodeStop?.setOnClickListener(this)
+
+        context = this
 
         // TEST
         /*
@@ -94,6 +133,15 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         fullscreen_content.player = simpleExoPlayer
         simpleExoPlayer.prepare(dashMediaSource)
         */
+       // DEFAULT_COOKIE_MANAGER = CookieManager()
+       // DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER)
+
+       // mURL = GoogleDrive(DEFAULT_COOKIE_MANAGER).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mURL).get()
+
+
+        if (CookieHandler.getDefault() != Sayonara.CM.cm) {
+            CookieHandler.setDefault(Sayonara.CM.cm)
+        }
 
         // TEST
         // 1. Create a default TrackSelector.
@@ -117,27 +165,29 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         simpleExoPlayerView?.player = player
 
         // 6. Set-up content.
-        val url = Uri.parse(mURL)
+        url = Uri.parse(mURL)
 
         // Measures bandwidth during playback.
         val bandwidthMeterA = DefaultBandwidthMeter()
 
         // Produces DataSource instances through which media data is loaded.
-        val dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Masterani"), bandwidthMeterA)
+        dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Masterani"), bandwidthMeterA)
 
         // Produces Extractor instances for parsing the media data.
-        val extractorsFactory = DefaultExtractorsFactory()
+        extractorsFactory = DefaultExtractorsFactory()
 
         // 7. We are always dealing with live-stream.
         //val videoSource = HlsMediaSource(url, dataSourceFactory, 1, null, null)
-        val videoSource = ExtractorMediaSource(url, dataSourceFactory, extractorsFactory, null, null)
-        val loopingMediaSource = LoopingMediaSource(videoSource)
+        videoSource = ExtractorMediaSource(url, dataSourceFactory, extractorsFactory, null, null)
+        //val mediaSource = MediaSource(videoSource)
 
         // Before 8. we need to initialize our loading bar.
         videoLoadingBar = findViewById(R.id.videoLoadingBar)
 
         // 8. Prepare the player with the source.
-        player?.prepare(loopingMediaSource)
+        player?.prepare(videoSource)
+        // Autoplay once prepared.
+        player?.playWhenReady = true
 
         // 9. Set the event listener.
         player?.addListener(this)
@@ -150,9 +200,20 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         // while interacting with the UI.
     }
 
+    // TEST NEXT EPISODE IMPLEMENTATION
+    override fun onClick(v: View?) {
+        countDownTimer.cancel()
+        finish()
+    }
+
     override fun onDestroy() {
         player?.release()
         super.onDestroy()
+    }
+
+    override fun onPause() {
+        player?.playWhenReady = false
+        super.onPause()
     }
 
     // We use onResume to ensure that everything is hidden again after coming back to foreground.
@@ -184,6 +245,25 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
         } else {
             videoLoadingBar?.hide()
             videoLoadingBar?.visibility = View.INVISIBLE
+        }
+
+        // TEST NEXT EPISODE IMPLEMENTATION
+        if (playbackState == Player.STATE_ENDED) {
+            if (mEpisodeCount != null && mCurrentEpisode != null && mEpisodeCount as Int > mCurrentEpisode as Int) {
+                nextEpisodeView?.visibility = View.VISIBLE
+
+                countDownTimer = object : CountDownTimer(5000, 1000) {
+
+                    override fun onTick(millisUntilFinished: Long) {
+                        nextEpisodeText.text = "Starting next episode in " + millisUntilFinished / 1000 + " seconds."
+                    }
+
+                    override fun onFinish() {
+                        nextEpisodeView?.visibility = View.INVISIBLE
+                        NextEpisode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    }
+                }.start()
+            }
         }
     }
 
@@ -272,5 +352,38 @@ class WatchActivity : AppCompatActivity(), Player.EventListener {
          * and a change of the status and navigation bar.
          */
         private val UI_ANIMATION_DELAY = 300
+    }
+
+    // NEXT EPISODE IMPLEMENTATION
+    inner class NextEpisode: AsyncTask<Void, Unit, Unit>() {
+        private var progressDialog: ProgressDialog? = null
+
+        override fun onPreExecute() {
+            // Start the progress bar.
+            mCurrentEpisode = mCurrentEpisode?.plus(1)
+            progressDialog = ProgressDialog.show(context, "Masterani", "Loading episode...")
+            player?.playWhenReady = false
+        }
+
+        override fun doInBackground(vararg p0: Void?) {
+            // Episode, start to video.
+            mURL = Sayonara(mSlug as String, mCurrentEpisode as Int).getLink()
+
+            url = Uri.parse(mURL)
+
+            val bandwidthMeterA = DefaultBandwidthMeter()
+            dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "Masterani"), bandwidthMeterA)
+            extractorsFactory = DefaultExtractorsFactory()
+            videoSource = ExtractorMediaSource(url, dataSourceFactory, extractorsFactory, null, null)
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            progressDialog?.dismiss()
+
+            player?.prepare(videoSource)
+            player?.playWhenReady = true
+
+            hide()
+        }
     }
 }

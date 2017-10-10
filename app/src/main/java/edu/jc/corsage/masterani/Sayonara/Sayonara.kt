@@ -2,10 +2,13 @@ package edu.jc.corsage.masterani.Sayonara
 
 import android.os.AsyncTask
 import android.util.Log
-import edu.jc.corsage.masterani.Masterani.Entities.Episode
 import edu.jc.corsage.masterani.Sayonara.Collection.Provider
 import edu.jc.corsage.masterani.Sayonara.Entities.Link
+import edu.jc.corsage.masterani.Sayonara.Scrapers.GoogleDrive
+import edu.jc.corsage.masterani.Sayonara.Scrapers.StreamMoe
 import edu.jc.corsage.masterani.Utils.WebUtil
+import java.net.CookieManager
+import java.net.CookiePolicy
 
 /**
  * Uses a custom API I created in node.js that finds links based on the ep.
@@ -18,6 +21,15 @@ class Sayonara(val slug: String, val episodeNumber: Int) {
 
     private val MASTERANI_VIDEO_API = "masterani/api/video"
     private val MASTERANI_EPISODE_LINKS = "?slug=%s&ep=%d"
+
+    // Cookie Manager.
+    object CM {
+        @JvmStatic val cm: CookieManager = CookieManager()
+
+        init {
+            cm.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER)
+        }
+    }
 
     fun getLink() : String {
         // 1) Get the episode links.
@@ -33,11 +45,22 @@ class Sayonara(val slug: String, val episodeNumber: Int) {
         /**
          * MP4Upload is first, it doesn't have IP_BOUND checks.
          */
-        for (link: Link in links) {
-            Log.d("Sayonara", link.name)
-            if (link.id == Provider.getId(Provider.MP4UPLOAD)) {
-                Log.d("Sayonara", "returning: " + link.link)
-                return link.link
+        for (provider: Link in links) {
+            Log.d("Sayonara", "Link name: " + provider.name)
+
+            when (provider.id) {
+                Provider.getId(Provider.MASTERANI), Provider.getId(Provider.MP4UPLOAD) -> {
+                    return provider.link
+                }
+
+                Provider.getId(Provider.GDRIVE) -> {
+                    return GoogleDrive(CM.cm).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, provider.link).get()
+                }
+
+                Provider.getId(Provider.STREAMMOE) -> {
+                    return StreamMoe().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, provider.link).get()
+                }
+
             }
         }
 

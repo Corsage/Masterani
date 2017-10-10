@@ -2,6 +2,7 @@ package edu.jc.corsage.masterani
 
 import android.database.MatrixCursor
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.provider.BaseColumns
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.NavigationView
@@ -50,6 +51,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     /* Masterani */
     private var masterani: Masterani? = null
 
+    init {
+        homeFragment = HomeFragment()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             // Create the home fragment.
-            homeFragment = HomeFragment()
+            //homeFragment = HomeFragment()
 
             // Pass intent extras to fragment.
             homeFragment?.arguments = intent.extras
@@ -93,6 +98,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //mMenuAdapter = SortMenuAdapter(this, listDataHeader, listDataChild, expandableList as ExpandableListView)
 
         //expandableList?.setAdapter(mMenuAdapter)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+
     }
 
     // Used for setting up Sort sub menu items.
@@ -156,13 +165,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
 
-        Log.d("onCreateOptionsMenu", "id for search is : " + R.id.animeSearch.toString())
-
-        val columns = arrayOf(BaseColumns._ID, "title", "info")
-
-        val cursor = MatrixCursor(columns)
-
-        suggestionAdapter = SearchAdapter(this, homeFragment as View.OnClickListener, cursor)
+        if (suggestionAdapter == null) {
+            val columns = arrayOf(BaseColumns._ID, "title", "info")
+            val cursor = MatrixCursor(columns)
+            suggestionAdapter = SearchAdapter(this, homeFragment as View.OnClickListener, cursor)
+        }
 
         // Get SearchView and setup the searchable configuration.
         val searchView: SearchView = menu.findItem(R.id.animeSearch).actionView as SearchView

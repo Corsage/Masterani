@@ -52,38 +52,48 @@ class HomeFragment : Fragment(), View.OnClickListener {
     var mWeakContext: WeakReference<Context>? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+       // retainInstance = true
+
         val view = inflater?.inflate(R.layout.view_home, container, false)
 
-        newestEps = view?.findViewById(R.id.releasesContainer)
-        beingWatched = view?.findViewById(R.id.beingWatchedList)
-        popularToday = view?.findViewById(R.id.popularTodayList)
-
-        HomeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        //if (newestEps == null || beingWatched == null || popularToday == null) {
+            newestEps = view?.findViewById(R.id.releasesContainer)
+            beingWatched = view?.findViewById(R.id.beingWatchedList)
+            popularToday = view?.findViewById(R.id.popularTodayList)
+            HomeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+     //   }
 
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        beingWatchedAdapter = PopularAdapter(context, this, getTodayStats.being_watched)
-        popularTodayAdapter = PopularAdapter(context, this, getTodayStats.popular_today)
+        mWeakContext = WeakReference<Context>(context)
+
+        if (beingWatchedAdapter == null) {
+            beingWatchedAdapter = PopularAdapter(context, this, getTodayStats.being_watched)
+        }
+
+        if (popularTodayAdapter == null) {
+            popularTodayAdapter = PopularAdapter(context, this, getTodayStats.popular_today)
+        }
 
         // set onClickListeners to the arrows in releases containers..
         backBtn.setOnClickListener(this)
         forwardBtn.setOnClickListener(this)
-
-        mWeakContext = WeakReference<Context>(context)
-
     }
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.backBtn -> {
-                Log.d("hehexd", newestEpslayoutManager!!.findFirstVisibleItemPosition().toString())
-                releasesContainer.smoothScrollToPosition(newestEpslayoutManager!!.findFirstVisibleItemPosition() - 1)
+                if (newestEpslayoutManager!!.findFirstVisibleItemPosition() > 0) {
+                    releasesContainer.smoothScrollToPosition(newestEpslayoutManager!!.findFirstVisibleItemPosition() - 1)
+                }
             }
 
             R.id.forwardBtn -> {
-                releasesContainer.smoothScrollToPosition(newestEpslayoutManager!!.findLastVisibleItemPosition() + 1)
+                if (newestEpslayoutManager!!.findLastVisibleItemPosition() < newestEpslayoutManager!!.itemCount) {
+                    releasesContainer.smoothScrollToPosition(newestEpslayoutManager!!.findLastVisibleItemPosition() + 1)
+                }
             }
 
             R.id.searchItem, R.id.popularMain -> {
@@ -100,24 +110,49 @@ class HomeFragment : Fragment(), View.OnClickListener {
      // Used to load information onto fragment without making the user wait for the UI to load all at once.
     inner class HomeUtil : AsyncTask<Int?, Unit, Unit>() {
         override fun doInBackground(vararg p0: Int?) {
-            newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
+            if (newestEpslayoutManager == null) {
+                newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
 
-            beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            if (episodeAdapter == null) {
+                episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
+            }
 
-            popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            if (beingWatchedLayoutManager == null) {
+                beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
+
+            if (popularTodayLayoutManager == null) {
+                popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
         }
 
          override fun onPostExecute(result: Unit?) {
-             newestEps?.layoutManager = newestEpslayoutManager
-             newestEps?.adapter = episodeAdapter
+             if (newestEps?.layoutManager == null) {
+                 newestEps?.layoutManager = newestEpslayoutManager
+             }
+
+             if (newestEps?.adapter == null) {
+                 newestEps?.adapter = episodeAdapter
+             }
+
              epsSnapHelper.attachToRecyclerView(newestEps)
 
-             beingWatched?.layoutManager = beingWatchedLayoutManager
-             beingWatched?.adapter = beingWatchedAdapter
+             if (beingWatched?.layoutManager == null) {
+                 beingWatched?.layoutManager = beingWatchedLayoutManager
+             }
 
-             popularToday?.layoutManager = popularTodayLayoutManager
-             popularToday?.adapter = popularTodayAdapter
+             if (beingWatched?.adapter == null) {
+                 beingWatched?.adapter = beingWatchedAdapter
+             }
+
+             if (popularToday?.layoutManager == null) {
+                 popularToday?.layoutManager = popularTodayLayoutManager
+             }
+
+             if (popularToday?.adapter == null) {
+                 popularToday?.adapter = popularTodayAdapter
+             }
          }
     }
 }

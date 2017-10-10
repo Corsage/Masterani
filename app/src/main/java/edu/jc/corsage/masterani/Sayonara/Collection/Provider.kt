@@ -5,6 +5,7 @@ package edu.jc.corsage.masterani.Sayonara.Collection
  */
 
 enum class Provider(val id: Int) {
+    MASTERANI(0),
     MP4UPLOAD(1),
     GDRIVE(12),
     OPENLOAD(15),

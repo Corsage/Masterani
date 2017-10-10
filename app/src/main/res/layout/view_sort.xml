@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/animeList"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="wrap_content">
 
-    android:horizontalSpacing="0dp"
-    android:verticalSpacing="8dp"
-    android:numColumns="auto_fit"
-    android:columnWidth="134dp"
-    android:stretchMode="spacingWidthUniform"
-    android:gravity="center"
+    <LinearLayout
+        android:id="@+id/sortLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    android:scrollingCache="true"
-    android:smoothScrollbar="true"
-    android:alwaysDrawnWithCache="true"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort" />
 
-    android:background="@color/backgroundPrimary" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/animeList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/sortLayout"
+
+        android:horizontalSpacing="0dp"
+        android:verticalSpacing="8dp"
+        android:numColumns="auto_fit"
+        android:columnWidth="134dp"
+        android:stretchMode="spacingWidthUniform"
+        android:gravity="center"
+
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:alwaysDrawnWithCache="true"
+
+        android:background="@color/backgroundPrimary" />
+
+</RelativeLayout>
