@@ -12,8 +12,11 @@ import kotlinx.android.synthetic.main.view_home.*
 import android.support.v7.widget.*
 import android.util.Log
 import android.view.*
+import edu.jc.corsage.masterani.Adapters.EpisodeAdapter
 import edu.jc.corsage.masterani.Adapters.PopularAdapter
 import edu.jc.corsage.masterani.AnimeActivity
+import edu.jc.corsage.masterani.Masterani.Entities.Anime
+import edu.jc.corsage.masterani.Masterani.Entities.Popular
 import java.lang.ref.WeakReference
 
 /**
@@ -27,6 +30,8 @@ import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment(), View.OnClickListener {
     private val masterani = Masterani()
+    private val parent = this
+    private var activity: Context? = null
 
     /* Newest Episodes */
     private var newestEps: RecyclerView? = null
@@ -37,7 +42,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private var epsSnapHelper = PagerSnapHelper()
 
     /* Trending Anime */
-    private val getTodayStats = masterani.getTrendingAnime()
+    private var getTodayStats: Popular? = null
 
     private var beingWatched: RecyclerView? = null
     private var popularToday: RecyclerView? = null
@@ -51,8 +56,19 @@ class HomeFragment : Fragment(), View.OnClickListener {
     // Weak context for usage.
     var mWeakContext: WeakReference<Context>? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Check if recreating instance.
+        if (savedInstanceState != null) {
+            episodeAdapter = ReleaseAdapter(context, savedInstanceState.getParcelableArrayList("newestEps"))
+            beingWatchedAdapter = PopularAdapter(context, this, savedInstanceState.getParcelableArrayList("beingWatched"))
+            popularTodayAdapter = PopularAdapter(context, this, savedInstanceState.getParcelableArrayList("popularToday"))
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-       // retainInstance = true
+        //retainInstance = true
 
         val view = inflater?.inflate(R.layout.view_home, container, false)
 
@@ -60,8 +76,27 @@ class HomeFragment : Fragment(), View.OnClickListener {
             newestEps = view?.findViewById(R.id.releasesContainer)
             beingWatched = view?.findViewById(R.id.beingWatchedList)
             popularToday = view?.findViewById(R.id.popularTodayList)
+
+        if (episodeAdapter == null ||  beingWatchedAdapter == null || popularTodayAdapter == null) {
+            Log.d("HomeFragment", "Adapters/Layout Managers are null.")
             HomeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-     //   }
+        } else {
+            // Re-visiting fragment.
+            if (newestEpslayoutManager == null) {
+                newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+            newestEps?.layoutManager = newestEpslayoutManager
+
+            if (beingWatchedLayoutManager == null) {
+                beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
+            beingWatched?.layoutManager = beingWatchedLayoutManager
+
+            if (popularTodayLayoutManager == null) {
+                popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
+            popularToday?.layoutManager = popularTodayLayoutManager
+        }
 
         return view
     }
@@ -69,17 +104,41 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         mWeakContext = WeakReference<Context>(context)
 
-        if (beingWatchedAdapter == null) {
-            beingWatchedAdapter = PopularAdapter(context, this, getTodayStats.being_watched)
+        if (newestEps?.adapter == null) {
+            newestEps?.adapter = episodeAdapter
         }
 
-        if (popularTodayAdapter == null) {
-            popularTodayAdapter = PopularAdapter(context, this, getTodayStats.popular_today)
+        if (beingWatched?.adapter == null) {
+            beingWatched?.adapter = beingWatchedAdapter
+        }
+
+        if (popularToday?.adapter == null) {
+            popularToday?.adapter = popularTodayAdapter
         }
 
         // set onClickListeners to the arrows in releases containers..
         backBtn.setOnClickListener(this)
         forwardBtn.setOnClickListener(this)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putParcelableArrayList("newestEps", episodeAdapter?.releases)
+        outState?.putParcelableArrayList("popularToday", popularTodayAdapter?.releases)
+        outState?.putParcelableArrayList("beingWatched", beingWatchedAdapter?.releases)
+    }
+
+    override fun onDestroy() {
+        newestEpslayoutManager = null
+        popularTodayLayoutManager = null
+        beingWatchedLayoutManager = null
+
+        super.onDestroy()
+    }
+
+    override fun onAttach(context: Context?) {
+        activity = context
+        super.onAttach(context)
     }
 
     override fun onClick(view: View) {
@@ -99,9 +158,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
             R.id.searchItem, R.id.popularMain -> {
                 // Only id is needed to create url.
                 val id = view.tag as Int
-                val intent = Intent(context, AnimeActivity::class.java)
+                val intent = Intent(activity, AnimeActivity::class.java)
                 intent.putExtra("ID", id)
-                context.startActivity(intent)
+                activity?.startActivity(intent)
             }
         }
     }
@@ -110,10 +169,12 @@ class HomeFragment : Fragment(), View.OnClickListener {
      // Used to load information onto fragment without making the user wait for the UI to load all at once.
     inner class HomeUtil : AsyncTask<Int?, Unit, Unit>() {
         override fun doInBackground(vararg p0: Int?) {
+
+            getTodayStats = masterani.getTrendingAnime()
+
             if (newestEpslayoutManager == null) {
                 newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
-
             if (episodeAdapter == null) {
                 episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
             }
@@ -121,9 +182,15 @@ class HomeFragment : Fragment(), View.OnClickListener {
             if (beingWatchedLayoutManager == null) {
                 beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
             }
+            if (beingWatchedAdapter == null) {
+                beingWatchedAdapter = PopularAdapter(context, parent, getTodayStats!!.being_watched as ArrayList<Anime>)
+            }
 
             if (popularTodayLayoutManager == null) {
                 popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
+            if (popularTodayAdapter == null) {
+                popularTodayAdapter = PopularAdapter(context, parent, getTodayStats!!.popular_today as ArrayList<Anime>)
             }
         }
 

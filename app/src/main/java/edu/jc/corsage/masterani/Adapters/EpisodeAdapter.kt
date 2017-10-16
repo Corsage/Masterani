@@ -17,7 +17,7 @@ import org.w3c.dom.Text
  * Created by j3chowdh on 9/23/2017.
  */
 
-class EpisodeAdapter(val context: Context, val episodeList: List<DetailedEpisode>) : BaseAdapter() {
+class EpisodeAdapter(val context: Context, val episodeList: List<DetailedEpisode>, val episodeLength: Int?) : BaseAdapter() {
     private val inflator = LayoutInflater.from(context)
 
     override fun getCount(): Int {
@@ -51,7 +51,12 @@ class EpisodeAdapter(val context: Context, val episodeList: List<DetailedEpisode
                 .apply(RequestOptions.centerCropTransform())
                 .into(erh.episodePoster)
 
-        erh.duration.text = episodeList[pos].info?.getDurationText
+        if (episodeLength != null) {
+            erh.duration.text = episodeLength.toString() + " MIN"
+        } else {
+            erh.duration.text = episodeList[pos].info?.getDurationText
+        }
+
         erh.episodeName.text = episodeList[pos].info?.title
         erh.episodeNumber.text = episodeList[pos].info?.getEpisodeText
 

@@ -31,6 +31,14 @@ class AnimeSearch(val id: Int,
 }
 
 @Parcelize
+class SortAnime(val id: Int,
+                val title: String,
+                val slug: String,
+                val status: Int?,
+                val type: Int?,
+                val score: Float?) : Parcelable
+
+@Parcelize
 class DetailedAnime(val info: Info,
                     val poster: String? = null,
                     val genres: List<Genre>?,

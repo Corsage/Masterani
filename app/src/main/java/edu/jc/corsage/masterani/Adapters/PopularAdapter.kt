@@ -18,7 +18,7 @@ import edu.jc.corsage.masterani.R
  * Created by j3chowdh on 9/14/2017.
  */
 
-class PopularAdapter(val context: Context, val listener: View.OnClickListener, val releases: List<Anime>) : RecyclerView.Adapter<PopularAdapter.PopularRowHolder>() {
+class PopularAdapter(val context: Context, val listener: View.OnClickListener, val releases: ArrayList<Anime>) : RecyclerView.Adapter<PopularAdapter.PopularRowHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount(): Int {

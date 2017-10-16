@@ -192,63 +192,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         // TODO: Properly utilize addToBackStack.
+        val ft = supportFragmentManager.beginTransaction()
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+
         when (item.itemId) {
             R.id.nav_favorite -> {
                 if (favoriteFragment == null) {
                     favoriteFragment = FavoriteFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, favoriteFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, favoriteFragment)
+            }
+            R.id.nav_home -> {
+                if (homeFragment == null) {
+                    homeFragment = HomeFragment()
+                }
+                ft.replace(R.id.fragment_container, homeFragment)
             }
             R.id.nav_sort -> {
                 if (sortFragment == null) {
                     sortFragment = SortFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, sortFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, sortFragment)
             }
             R.id.nav_schedule -> {
                 if (scheduleFragment == null) {
                     scheduleFragment = ScheduleFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, scheduleFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, scheduleFragment)
             }
             R.id.nav_mal -> {
                 if (malFragment == null) {
                     malFragment = MALFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, malFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, malFragment)
             }
             R.id.nav_kitsu -> {
                 if (kitsuFragment == null) {
                     kitsuFragment = KitsuFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, kitsuFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, kitsuFragment)
             }
             R.id.nav_settings -> {
                 if (settingFragment == null) {
                     settingFragment = SettingFragment()
                 }
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, settingFragment)
-                        .addToBackStack(null)
-                        .commit()
+                ft.replace(R.id.fragment_container, settingFragment)
             }
         }
 
+        ft.commit()
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }

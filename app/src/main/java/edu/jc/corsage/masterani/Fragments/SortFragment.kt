@@ -27,12 +27,12 @@ class SortFragment() : Fragment() {
 
         val masterani = Masterani()
 
-       // val www = view?.findViewById<GridView>(R.id.animeList)
+        val www = view?.findViewById<GridView>(R.id.animeList)
 
         // TEST
-        //val xd = AnimeAdapter(context, masterani.getSortedAnimes(Order.SCORE_HIGH, pageNumber).data)
+        val xd = AnimeAdapter(context, masterani.getSortedAnimes(Order.SCORE_HIGH, pageNumber).data)
 
-       // www?.adapter = xd
+        www?.adapter = xd
         Log.d("SortFragment", "Creating view")
         return view
     }

@@ -55,7 +55,7 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
 
     private var url : Uri? = null
     private lateinit var context : Context
-    private lateinit var countDownTimer : CountDownTimer
+    private var countDownTimer : CountDownTimer? = null
 
     // TEST
     private lateinit var DEFAULT_COOKIE_MANAGER : CookieManager
@@ -202,7 +202,7 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
 
     // TEST NEXT EPISODE IMPLEMENTATION
     override fun onClick(v: View?) {
-        countDownTimer.cancel()
+        countDownTimer?.cancel()
         finish()
     }
 
@@ -219,7 +219,6 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
     // We use onResume to ensure that everything is hidden again after coming back to foreground.
     override fun onResume() {
         super.onResume()
-
         mVisible = true
     }
 
@@ -250,6 +249,7 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
         // TEST NEXT EPISODE IMPLEMENTATION
         if (playbackState == Player.STATE_ENDED) {
             if (mEpisodeCount != null && mCurrentEpisode != null && mEpisodeCount as Int > mCurrentEpisode as Int) {
+                Log.d("NextEpisode", "Changing episode.")
                 nextEpisodeView?.visibility = View.VISIBLE
 
                 countDownTimer = object : CountDownTimer(5000, 1000) {
@@ -272,7 +272,8 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
     }
 
     override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-
+        Log.d("onTracksChanged", "Track has changed.")
+        player?.addListener(this)
     }
 
     override fun onLoadingChanged(isLoading: Boolean) {
@@ -362,7 +363,6 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
             // Start the progress bar.
             mCurrentEpisode = mCurrentEpisode?.plus(1)
             progressDialog = ProgressDialog.show(context, "Masterani", "Loading episode...")
-            player?.playWhenReady = false
         }
 
         override fun doInBackground(vararg p0: Void?) {
@@ -381,8 +381,6 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
             progressDialog?.dismiss()
 
             player?.prepare(videoSource)
-            player?.playWhenReady = true
-
             hide()
         }
     }

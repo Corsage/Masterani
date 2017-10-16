@@ -16,4 +16,4 @@ data class Sort(val total: Int,
                 val prev_page_url: String?,
                 val from: Int,
                 val to: Int,
-                val data: List<DetailedAnime>) : Parcelable
+                val data: List<SortAnime>) : Parcelable

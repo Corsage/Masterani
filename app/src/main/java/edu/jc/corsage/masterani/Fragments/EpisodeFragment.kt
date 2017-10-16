@@ -28,7 +28,6 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
     private lateinit var episodes: List<DetailedEpisode>
     private lateinit var slug: String
 
-    private var episode_count: Int? = null
     private var episode_length: Int? = null
 
     private lateinit var episodeAdapter: EpisodeAdapter
@@ -48,11 +47,11 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>?, v: View?, pos: Int, id: Long) {
         val info = v?.tag as DetailedEpisode.Info?
 
-        ShowEpisode(slug, info?.episode!!.toInt(), episode_count).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        ShowEpisode(slug, info?.episode!!.toInt()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     // Handling actions.
-    inner class ShowEpisode(val slug: String, val episode: Int, val episode_count: Int?) : AsyncTask<Void, Intent?, Intent?>() {
+    inner class ShowEpisode(val slug: String, val episode: Int) : AsyncTask<Void, Intent?, Intent?>() {
         private var progressDialog: ProgressDialog? = null
 
         override fun onPreExecute() {
@@ -70,7 +69,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
             // TEST NEXT EPISODE IMPLEMENTATION
             intent.putExtra("SLUG", slug)
             intent.putExtra("CURRENT_EPISODE", episode)
-            intent.putExtra("EPISODE_COUNT", episode_count)
+            intent.putExtra("EPISODE_COUNT", episodeAdapter.count)
 
             return intent
         }
@@ -86,13 +85,11 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
             val temp = Masterani().getSpecificAnimeEpisodes(p0[0])
             episodes = temp.episodes
             slug = temp.info.slug
-
-            episode_count = temp.info.episode_count
             episode_length = temp.info.episode_length
         }
 
         override fun onPostExecute(result: Unit?) {
-            episodeAdapter = EpisodeAdapter(context, episodes)
+            episodeAdapter = EpisodeAdapter(context, episodes, episode_length)
             episodeListView.adapter = episodeAdapter
         }
     }
