@@ -1,95 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/homeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tvReleases"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/textLight"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="RECENT ANIME" />
-
-        <FrameLayout
-            android:id="@+id/releasesHolder"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvReleases">
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/tvReleases"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="RECENT ANIME" />
+
+            <FrameLayout
+                android:id="@+id/releasesHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvReleases">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/releasesContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageButton
+                    android:id="@+id/backBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start|center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@color/backgroundTransparent"
+                    app:srcCompat="@drawable/ic_arrow_back" />
+
+                <ImageButton
+                    android:id="@+id/forwardBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end|center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@color/backgroundTransparent"
+                    app:srcCompat="@drawable/ic_arrow_forward" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvBeingWatched"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/releasesHolder"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="BEING WATCHED" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/releasesContainer"
+                android:id="@+id/beingWatchedList"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/tvBeingWatched" />
 
-            <ImageButton
-                android:id="@+id/backBtn"
+            <TextView
+                android:id="@+id/tvPopularToday"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start|center_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@color/backgroundTransparent"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/beingWatchedList"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="POPULAR TODAY" />
 
-            <ImageButton
-                android:id="@+id/forwardBtn"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/popularTodayList"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end|center_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@color/backgroundTransparent"
-                app:srcCompat="@drawable/ic_arrow_forward" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/tvPopularToday" />
 
-        </FrameLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvBeingWatched"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/releasesHolder"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/textLight"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="BEING WATCHED" />
+    </android.support.v4.widget.NestedScrollView>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/beingWatchedList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/tvBeingWatched" />
-
-        <TextView
-            android:id="@+id/tvPopularToday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/beingWatchedList"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/textLight"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:text="POPULAR TODAY" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/popularTodayList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/tvPopularToday" />
-
-    </RelativeLayout>
-
-</ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
