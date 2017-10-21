@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.view_home.*
 import android.support.v7.widget.*
 import android.util.Log
 import android.view.*
-import edu.jc.corsage.masterani.Adapters.EpisodeAdapter
 import edu.jc.corsage.masterani.Adapters.PopularAdapter
 import edu.jc.corsage.masterani.AnimeActivity
 import edu.jc.corsage.masterani.Masterani.Entities.Anime
@@ -122,6 +121,8 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
             popularToday?.adapter = popularTodayAdapter
         }
 
+        epsSnapHelper.attachToRecyclerView(newestEps)
+
         // set onClickListeners to the arrows in releases containers..
         backBtn.setOnClickListener(this)
         forwardBtn.setOnClickListener(this)
@@ -215,8 +216,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
 
                  newestEps?.adapter = episodeAdapter
 
-
-             epsSnapHelper.attachToRecyclerView(newestEps)
 
 
                  beingWatched?.layoutManager = beingWatchedLayoutManager

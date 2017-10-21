@@ -36,7 +36,20 @@ class SortAnime(val id: Int,
                 val slug: String,
                 val status: Int?,
                 val type: Int?,
-                val score: Float?) : Parcelable
+                val score: Float?,
+                val poster: Poster?) : Parcelable {
+    @Parcelize
+    class Poster(val file: String?) : Parcelable {
+        val getPoster: String?
+        get() {
+            if (file != null) {
+                return Masterani.CDN.POSTER_URL + file
+            } else {
+                return null
+            }
+        }
+    }
+}
 
 @Parcelize
 class DetailedAnime(val info: Info,

@@ -16,9 +16,8 @@ import edu.jc.corsage.masterani.R
  * Created by j3chowdh on 9/10/2017.
  */
 
-public class AnimeAdapter(val context: Context, animeList: List<SortAnime>) : BaseAdapter() {
+public class AnimeAdapter(val context: Context, val animeList: ArrayList<SortAnime>) : BaseAdapter() {
     private val inflator: LayoutInflater = LayoutInflater.from(context)
-    private val animeList: List<SortAnime> = animeList
 
     override fun getCount(): Int {
         return animeList.size
@@ -32,6 +31,10 @@ public class AnimeAdapter(val context: Context, animeList: List<SortAnime>) : Ba
         return pos.toLong()
     }
 
+    fun addItems(items: ArrayList<SortAnime>) {
+        this.animeList.addAll(items)
+    }
+
     override fun getView(pos: Int, view: View?, viewGroup: ViewGroup): View {
         val v: View
 
@@ -40,15 +43,15 @@ public class AnimeAdapter(val context: Context, animeList: List<SortAnime>) : Ba
         } else {
             v = view
         }
-        v.tag = animeList[pos]
+        v.tag = animeList[pos].id
         val arh = AnimeRowHolder(v)
 
         Glide.with(context)
-               .load(null)
+               .load(animeList[pos].poster?.getPoster)
                 .apply(RequestOptions.placeholderOf(R.drawable.default_poster))
                 .into(arh.ivAnimePoster)
 
-        arh.tvAnimeRating.text= animeList[pos].score.toString()
+        arh.tvAnimeRating.text = animeList[pos].score.toString()
         arh.tvAnimeTitle.text = animeList[pos].title
         arh.tvAnimeInfo.text = "test"
 

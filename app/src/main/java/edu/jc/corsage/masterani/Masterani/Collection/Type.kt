@@ -4,7 +4,7 @@ package edu.jc.corsage.masterani.Masterani.Collection
  * Contains all possible anime types for Masterani, and their associated values.
  */
 
-data class Type(val type: Int) {
+data class Type(private val type: Int) {
 
     override fun toString(): String  = when (type) {
         0 ->  "TV Series"
