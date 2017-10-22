@@ -48,6 +48,15 @@ class SortAnime(val id: Int,
                 return null
             }
         }
+
+        val getMaxSizePoster: String?
+        get() {
+            if (file != null) {
+                return Masterani.CDN.POSTER_MAXSIZE_URL + file
+            } else {
+                return null
+            }
+        }
     }
 }
 

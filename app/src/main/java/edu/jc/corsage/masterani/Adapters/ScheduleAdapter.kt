@@ -45,7 +45,7 @@ class ScheduleAdapter(val context: Context, val releases: ArrayList<Schedule>) :
         srh.view.tag = releases[pos].anime.id
 
         Glide.with(context)
-                .load(releases[pos].anime.poster.getPoster)
+                .load(releases[pos].anime.poster.getMaxSizePoster)
                 .apply(RequestOptions.placeholderOf(R.drawable.default_wallpaper))
                 .apply(RequestOptions.centerCropTransform())
                 .into(srh.schedulePoster)
