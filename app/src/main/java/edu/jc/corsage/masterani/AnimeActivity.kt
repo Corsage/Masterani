@@ -17,8 +17,6 @@ class AnimeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         // Retrieve anime ID from intent.
         ID = intent.extras.getInt("ID")
 

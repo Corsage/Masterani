@@ -5,9 +5,9 @@ import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import edu.jc.corsage.masterani.Masterani.Collection.Order
 import edu.jc.corsage.masterani.Masterani.Entities.*
 import edu.jc.corsage.masterani.Sayonara.Entities.Link
+import edu.jc.corsage.masterani.Sayonara.Entities.Schedule
 import java.io.IOException
 import java.lang.reflect.ParameterizedType
 import java.net.HttpURLConnection
@@ -63,6 +63,13 @@ class WebUtil(val object_type: String) : AsyncTask<String, Void, Any?>() {
             "LINK" -> {
                 type = Types.newParameterizedType(List::class.java, Link::class.java)
                 adapter = moshi.adapter<JsonAdapter<List<Link>>>(type)
+                return adapter.fromJson(data)
+            }
+
+            // Schedule.
+            "ANIME_SCHEDULE" -> {
+                type = Types.newParameterizedType(List::class.java, Schedule::class.java)
+                adapter = moshi.adapter<JsonAdapter<List<Schedule>>>(type)
                 return adapter.fromJson(data)
             }
 

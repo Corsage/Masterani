@@ -102,6 +102,8 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         if (newestEps?.adapter == null) {
             newestEps?.adapter = episodeAdapter
         }

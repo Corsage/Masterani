@@ -367,7 +367,7 @@ class WatchActivity : AppCompatActivity(), Player.EventListener, View.OnClickLis
 
         override fun doInBackground(vararg p0: Void?) {
             // Episode, start to video.
-            mURL = Sayonara(mSlug as String, mCurrentEpisode as Int).getLink()
+            mURL = Sayonara().getLink(mSlug as String, mCurrentEpisode as Int)
 
             url = Uri.parse(mURL)
 

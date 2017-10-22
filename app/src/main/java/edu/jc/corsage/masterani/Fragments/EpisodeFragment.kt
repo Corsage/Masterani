@@ -61,7 +61,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
 
         override fun doInBackground(vararg p0: Void?): Intent? {
             // Episode, start to video.
-            val sayonara = Sayonara(slug, episode).getLink()
+            val sayonara = Sayonara().getLink(slug, episode)
 
             val intent = Intent(context, WatchActivity::class.java)
             intent.putExtra("URL", sayonara)
