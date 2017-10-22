@@ -95,6 +95,14 @@
                 android:orientation="horizontal"
                 android:layout_below="@id/tvPopularToday" />
 
+            <android.support.v4.widget.ContentLoadingProgressBar
+                android:id="@+id/homeLoading"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
+
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

@@ -8,17 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_horizontal"
         android:background="@color/colorPrimary">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Sort"
-            android:textColor="@color/textLight" />
+            android:text="A - Z"/>
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="TYPE - ALL"/>
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="STATUS - ALL"/>
+
     </LinearLayout>
 
     <GridView

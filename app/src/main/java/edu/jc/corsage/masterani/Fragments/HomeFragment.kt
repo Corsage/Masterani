@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v4.widget.SwipeRefreshLayout
 import edu.jc.corsage.masterani.Adapters.ReleaseAdapter
 import edu.jc.corsage.masterani.Masterani.Masterani
@@ -56,9 +57,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
     private var beingWatchedAdapter: PopularAdapter? = null
     private var popularTodayAdapter: PopularAdapter? = null
 
-    // Weak context for usage.
-    var mWeakContext: WeakReference<Context>? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,14 +69,11 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //retainInstance = true
-
         val view = inflater?.inflate(R.layout.view_home, container, false)
 
-        //if (newestEps == null || beingWatched == null || popularToday == null) {
-            newestEps = view?.findViewById(R.id.releasesContainer)
-            beingWatched = view?.findViewById(R.id.beingWatchedList)
-            popularToday = view?.findViewById(R.id.popularTodayList)
+        newestEps = view?.findViewById(R.id.releasesContainer)
+        beingWatched = view?.findViewById(R.id.beingWatchedList)
+        popularToday = view?.findViewById(R.id.popularTodayList)
 
         swipeRefreshLayout = view?.findViewById(R.id.homeRefresh)
 
@@ -107,8 +102,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        mWeakContext = WeakReference<Context>(context)
-
         if (newestEps?.adapter == null) {
             newestEps?.adapter = episodeAdapter
         }
@@ -120,7 +113,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
         if (popularToday?.adapter == null) {
             popularToday?.adapter = popularTodayAdapter
         }
-
         epsSnapHelper.attachToRecyclerView(newestEps)
 
         // set onClickListeners to the arrows in releases containers..
@@ -142,7 +134,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
         newestEpslayoutManager = null
         popularTodayLayoutManager = null
         beingWatchedLayoutManager = null
-
         super.onDestroy()
     }
 
@@ -176,62 +167,40 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
     }
 
     override fun onRefresh() {
-        swipeRefreshLayout?.isRefreshing = true
         HomeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        swipeRefreshLayout?.isRefreshing = false
     }
 
      // HomeUtil AsyncTask
      // Used to load information onto fragment without making the user wait for the UI to load all at once.
     inner class HomeUtil : AsyncTask<Int?, Unit, Unit>() {
+         override fun onPreExecute() {
+             swipeRefreshLayout!!.isRefreshing = true
+         }
+
         override fun doInBackground(vararg p0: Int?) {
-
             getTodayStats = masterani.getTrendingAnime()
-
 
             newestEpslayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             episodeAdapter = ReleaseAdapter(context, masterani.getEpisodeReleases())
 
+            beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            beingWatchedAdapter = PopularAdapter(context, parent, getTodayStats!!.being_watched as ArrayList<Anime>)
 
-
-                beingWatchedLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-
-
-                beingWatchedAdapter = PopularAdapter(context, parent, getTodayStats!!.being_watched as ArrayList<Anime>)
-
-
-
-                popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
-
-
-                popularTodayAdapter = PopularAdapter(context, parent, getTodayStats!!.popular_today as ArrayList<Anime>)
-
+            popularTodayLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+            popularTodayAdapter = PopularAdapter(context, parent, getTodayStats!!.popular_today as ArrayList<Anime>)
         }
 
          override fun onPostExecute(result: Unit?) {
+             newestEps?.layoutManager = newestEpslayoutManager
+             newestEps?.adapter = episodeAdapter
 
-                 newestEps?.layoutManager = newestEpslayoutManager
+             beingWatched?.layoutManager = beingWatchedLayoutManager
+             beingWatched?.adapter = beingWatchedAdapter
 
+             popularToday?.layoutManager = popularTodayLayoutManager
+             popularToday?.adapter = popularTodayAdapter
 
-
-                 newestEps?.adapter = episodeAdapter
-
-
-
-                 beingWatched?.layoutManager = beingWatchedLayoutManager
-
-
-
-                 beingWatched?.adapter = beingWatchedAdapter
-
-
-
-                 popularToday?.layoutManager = popularTodayLayoutManager
-
-
-
-                 popularToday?.adapter = popularTodayAdapter
-
+             swipeRefreshLayout!!.isRefreshing = false
          }
     }
 }
