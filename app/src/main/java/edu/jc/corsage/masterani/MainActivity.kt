@@ -1,5 +1,6 @@
 package edu.jc.corsage.masterani
 
+import android.content.Intent
 import android.database.MatrixCursor
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -51,6 +52,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     /* Masterani */
     private var masterani: Masterani? = null
 
+    /* Fragment */
+    private var fragmentId = 0
+
     init {
         homeFragment = HomeFragment()
     }
@@ -101,7 +105,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-
+        // Save which fragment we are on.
+        outState!!.putInt("FRAGMENT_ID", fragmentId)
     }
 
     // Used for setting up Sort sub menu items.
@@ -201,42 +206,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (favoriteFragment == null) {
                     favoriteFragment = FavoriteFragment()
                 }
+                fragmentId = 1
                 ft.replace(R.id.fragment_container, favoriteFragment)
             }
             R.id.nav_home -> {
                 if (homeFragment == null) {
                     homeFragment = HomeFragment()
                 }
+                fragmentId = 0
                 ft.replace(R.id.fragment_container, homeFragment)
             }
             R.id.nav_sort -> {
                 if (sortFragment == null) {
                     sortFragment = SortFragment()
                 }
+                fragmentId = 2
                 ft.replace(R.id.fragment_container, sortFragment)
             }
             R.id.nav_schedule -> {
                 if (scheduleFragment == null) {
                     scheduleFragment = ScheduleFragment()
                 }
+                fragmentId = 3
                 ft.replace(R.id.fragment_container, scheduleFragment)
             }
             R.id.nav_mal -> {
                 if (malFragment == null) {
                     malFragment = MALFragment()
                 }
+                fragmentId = 4
                 ft.replace(R.id.fragment_container, malFragment)
             }
             R.id.nav_kitsu -> {
                 if (kitsuFragment == null) {
                     kitsuFragment = KitsuFragment()
                 }
+                fragmentId = 5
                 ft.replace(R.id.fragment_container, kitsuFragment)
             }
             R.id.nav_settings -> {
                 if (settingFragment == null) {
                     settingFragment = SettingFragment()
                 }
+                fragmentId = 6
                 ft.replace(R.id.fragment_container, settingFragment)
             }
         }
