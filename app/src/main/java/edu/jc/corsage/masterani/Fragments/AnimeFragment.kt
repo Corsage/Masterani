@@ -15,7 +15,6 @@ import edu.jc.corsage.masterani.Masterani.Entities.DetailedAnime
 import edu.jc.corsage.masterani.Masterani.Masterani
 import edu.jc.corsage.masterani.R
 import me.chensir.expandabletextview.ExpandableTextView
-import org.w3c.dom.Text
 import java.util.*
 
 /**
