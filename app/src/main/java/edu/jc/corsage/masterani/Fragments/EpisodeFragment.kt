@@ -5,20 +5,18 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import android.widget.ListView
 import edu.jc.corsage.masterani.Adapters.EpisodeAdapter
 import edu.jc.corsage.masterani.Masterani.Entities.DetailedEpisode
 import edu.jc.corsage.masterani.Masterani.Masterani
 import edu.jc.corsage.masterani.R
 import edu.jc.corsage.masterani.Sayonara.Sayonara
 import edu.jc.corsage.masterani.WatchActivity
-import kotlinx.android.synthetic.main.view_episode.*
+import java.util.ArrayList
 
 /**
  * Created by j3chowdh on 9/23/2017.
@@ -30,24 +28,48 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private var episode_length: Int? = null
 
-    private lateinit var episodeAdapter: EpisodeAdapter
+    private var episodeListView: ListView? = null
+    private var episodeAdapter: EpisodeAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Check if recreating instance.
+        if (savedInstanceState != null) {
+            episode_length = savedInstanceState.getInt("EPISODE_LENGTH")
+            episodeAdapter = EpisodeAdapter(context, savedInstanceState.getParcelableArrayList("EPISODES"), episode_length)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.view_episode, container, false)
-        EpisodeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arguments.getInt("ID"))
+
+        episodeListView = view.findViewById(R.id.episodeListView)
+
+        if (episodeAdapter == null) {
+            EpisodeUtil().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arguments.getInt("ID"))
+        } else {
+            episodeListView?.adapter = episodeAdapter
+        }
 
         return view
     }
 
     // Wait until view is created in order to populate listview.
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        episodeListView.onItemClickListener = this
+        episodeListView?.onItemClickListener = this
     }
 
     override fun onItemClick(parent: AdapterView<*>?, v: View?, pos: Int, id: Long) {
         val info = v?.tag as DetailedEpisode.Info?
 
         ShowEpisode(slug, info?.episode!!.toInt()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putParcelableArrayList("EPISODES", episodeAdapter?.episodeList as ArrayList<DetailedEpisode>)
+        outState?.putInt("EPISODE_LENGTH", episode_length as Int)
     }
 
     // Handling actions.
@@ -69,7 +91,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
             // TEST NEXT EPISODE IMPLEMENTATION
             intent.putExtra("SLUG", slug)
             intent.putExtra("CURRENT_EPISODE", episode)
-            intent.putExtra("EPISODE_COUNT", episodeAdapter.count)
+            intent.putExtra("EPISODE_COUNT", episodeAdapter?.count)
 
             return intent
         }
@@ -90,7 +112,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
 
         override fun onPostExecute(result: Unit?) {
             episodeAdapter = EpisodeAdapter(context, episodes, episode_length)
-            episodeListView.adapter = episodeAdapter
+            episodeListView?.adapter = episodeAdapter
         }
     }
 }

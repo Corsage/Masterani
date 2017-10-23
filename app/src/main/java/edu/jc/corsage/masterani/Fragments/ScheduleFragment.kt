@@ -88,6 +88,7 @@ class ScheduleFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         // Fix for smooth scrolling.
+
         mondayRecyclerView?.isNestedScrollingEnabled = false
         tuesdayRecyclerView?.isNestedScrollingEnabled = false
         wednesdayRecyclerView?.isNestedScrollingEnabled = false
@@ -103,16 +104,6 @@ class ScheduleFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onViewCreated(view, savedInstanceState)
 
         scheduleRefreshLayout?.setOnRefreshListener(this)
-
-        /*
-        mondayRecyclerView?.onItemClickListener = this
-        tuesdayRecyclerView?.onItemClickListener = this
-        wednesdayRecyclerView?.onItemClickListener = this
-        thursdayRecyclerView?.onItemClickListener = this
-        fridayRecyclerView?.onItemClickListener = this
-        saturdayRecyclerView?.onItemClickListener = this
-        sundayRecyclerView?.onItemClickListener = this
-        */
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

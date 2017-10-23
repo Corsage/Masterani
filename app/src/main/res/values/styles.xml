@@ -40,4 +40,11 @@
         <item name="android:background">@color/backgroundPrimary</item>
     </style>
 
+    <!-- Alert Dialog Theme -->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:textColorAlertDialogListItem">@color/textLight</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
 </resources>

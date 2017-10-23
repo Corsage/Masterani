@@ -1,30 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/sortLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:weightSum="100.0"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:background="@color/colorPrimary">
 
-        <Button
-            android:layout_width="100dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="A - Z"/>
+            android:layout_weight="30.0"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="TYPE - ALL"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:text="ORDER" />
 
-        <Button
-            android:layout_width="120dp"
+            <Button
+                android:id="@+id/sortSort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:text="SCORE HIGH"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="STATUS - ALL"/>
+            android:layout_weight="30.0"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:text="TYPE" />
+
+            <Button
+                android:id="@+id/sortType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:text="ALL"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30.0"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:textColor="@color/textLight"
+                android:textStyle="bold"
+                android:text="STATUS" />
+
+            <Button
+                android:id="@+id/sortStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:text="ALL"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/sortGenres"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10.0"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/colorPrimary"
+            android:contentDescription="Sort by genre(s)."
+            app:srcCompat="@drawable/ic_genre" />
 
     </LinearLayout>
 
