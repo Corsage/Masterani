@@ -88,7 +88,6 @@ class ScheduleFragment: Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         // Fix for smooth scrolling.
-
         mondayRecyclerView?.isNestedScrollingEnabled = false
         tuesdayRecyclerView?.isNestedScrollingEnabled = false
         wednesdayRecyclerView?.isNestedScrollingEnabled = false
