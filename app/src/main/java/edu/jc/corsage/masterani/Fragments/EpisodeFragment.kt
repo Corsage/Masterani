@@ -23,9 +23,7 @@ import java.util.ArrayList
  */
 
 class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
-    private lateinit var episodes: List<DetailedEpisode>
     private lateinit var slug: String
-
     private var episode_length: Int? = null
 
     private var episodeListView: ListView? = null
@@ -37,6 +35,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
         // Check if recreating instance.
         if (savedInstanceState != null) {
             episode_length = savedInstanceState.getInt("EPISODE_LENGTH")
+            slug = savedInstanceState.getString("SLUG")
             episodeAdapter = EpisodeAdapter(context, savedInstanceState.getParcelableArrayList("EPISODES"), episode_length)
         }
     }
@@ -70,6 +69,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
         super.onSaveInstanceState(outState)
         outState?.putParcelableArrayList("EPISODES", episodeAdapter?.episodeList as ArrayList<DetailedEpisode>)
         outState?.putInt("EPISODE_LENGTH", episode_length as Int)
+        outState?.putString("SLUG", slug)
     }
 
     // Handling actions.
@@ -105,13 +105,13 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
     inner class EpisodeUtil : AsyncTask<Int?, Unit, Unit>() {
         override fun doInBackground(vararg p0: Int?) {
             val temp = Masterani().getSpecificAnimeEpisodes(p0[0])
-            episodes = temp.episodes
             slug = temp.info.slug
             episode_length = temp.info.episode_length
+
+            episodeAdapter = EpisodeAdapter(context, temp.episodes, episode_length)
         }
 
         override fun onPostExecute(result: Unit?) {
-            episodeAdapter = EpisodeAdapter(context, episodes, episode_length)
             episodeListView?.adapter = episodeAdapter
         }
     }
