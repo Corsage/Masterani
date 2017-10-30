@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ import java.util.ArrayList
  */
 
 class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
-    private lateinit var slug: String
+    private var slug: String? = null
     private var episode_length: Int? = null
 
     private var episodeListView: ListView? = null
@@ -62,7 +63,7 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>?, v: View?, pos: Int, id: Long) {
         val info = v?.tag as DetailedEpisode.Info?
 
-        ShowEpisode(slug, info?.episode!!.toInt()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        ShowEpisode(slug as String, info?.episode!!.toInt()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -70,6 +71,16 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
         outState?.putParcelableArrayList("EPISODES", episodeAdapter?.episodeList as ArrayList<DetailedEpisode>)
         outState?.putInt("EPISODE_LENGTH", episode_length as Int)
         outState?.putString("SLUG", slug)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("EpisodeFragment", "Destroying...")
+
+        slug = null
+        episode_length = null
+        episodeListView = null
+        episodeAdapter = null
     }
 
     // Handling actions.

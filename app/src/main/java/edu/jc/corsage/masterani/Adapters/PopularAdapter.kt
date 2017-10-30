@@ -1,6 +1,7 @@
 package edu.jc.corsage.masterani.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import edu.jc.corsage.masterani.AnimeActivity
 import edu.jc.corsage.masterani.Masterani.Entities.Anime
 import edu.jc.corsage.masterani.Masterani.Entities.Episode
 import edu.jc.corsage.masterani.R
@@ -18,7 +20,7 @@ import edu.jc.corsage.masterani.R
  * Created by j3chowdh on 9/14/2017.
  */
 
-class PopularAdapter(val context: Context, val listener: View.OnClickListener, val releases: ArrayList<Anime>) : RecyclerView.Adapter<PopularAdapter.PopularRowHolder>() {
+class PopularAdapter(val context: Context, val releases: ArrayList<Anime>) : RecyclerView.Adapter<PopularAdapter.PopularRowHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount(): Int {
@@ -44,6 +46,12 @@ class PopularAdapter(val context: Context, val listener: View.OnClickListener, v
 
         prh.tvAnimeRating.text = releases[pos].total.toString()
         prh.tvAnimeTitle.text = releases[pos].title
+
+        prh.view.setOnClickListener {
+            val intent = Intent(context, AnimeActivity::class.java)
+            intent.putExtra("ID", releases[pos].getID)
+            context.startActivity(intent)
+        }
     }
 
     inner class PopularRowHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -52,7 +60,7 @@ class PopularAdapter(val context: Context, val listener: View.OnClickListener, v
         val tvAnimeTitle: TextView = view.findViewById(R.id.tvAnimeTitle)
 
         init {
-            view.setOnClickListener(listener)
+           // view.setOnClickListener(listener)
         }
     }
 }

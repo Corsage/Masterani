@@ -3,6 +3,7 @@ package edu.jc.corsage.masterani.Fragments
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +23,13 @@ import me.chensir.expandabletextview.ExpandableTextView
 class AnimeFragment : Fragment() {
     private var anime: DetailedAnime? = null
 
-    private lateinit var wallpaper: ImageView
-    private lateinit var poster: ImageView
-    private lateinit var title: TextView
-    private lateinit var type: TextView
-    private lateinit var tvStatus: TextView
-    private lateinit var ageRating: TextView
-    private lateinit var synopsis: ExpandableTextView
+    private var wallpaper: ImageView? = null
+    private var poster: ImageView? = null
+    private var title: TextView? = null
+    private var type: TextView? = null
+    private var tvStatus: TextView? = null
+    private var ageRating: TextView? = null
+    private var synopsis: ExpandableTextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,11 +52,11 @@ class AnimeFragment : Fragment() {
         synopsis = view.findViewById(R.id.synopsis)
 
         if (anime != null) {
-            title.text = anime?.info?.title
-            type.text = anime?.info?.getTypeText
-            tvStatus.text = anime?.info?.getStatusText
-            ageRating.text = anime?.info?.age_rating
-            synopsis.text = anime?.info?.synopsis
+            title?.text = anime?.info?.title
+            type?.text = anime?.info?.getTypeText
+            tvStatus?.text = anime?.info?.getStatusText
+            ageRating?.text = anime?.info?.age_rating
+            synopsis?.text = anime?.info?.synopsis
 
             Glide.with(context)
                     .load(anime?.getRandomWallpaper)
@@ -82,6 +83,21 @@ class AnimeFragment : Fragment() {
         outState?.putParcelable("ANIME", anime)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("AnimeFragment", "Destroying...")
+
+        anime = null
+        wallpaper = null
+        poster = null
+        title = null
+        type = null
+        tvStatus = null
+        ageRating = null
+        synopsis = null
+    }
+
      inner class AnimeUtil : AsyncTask<Int?, Unit, Unit>() {
          override fun doInBackground(vararg p0: Int?) {
              anime = Masterani().getSpecificAnime(p0[0])
@@ -99,11 +115,11 @@ class AnimeFragment : Fragment() {
                      .apply(RequestOptions.placeholderOf(R.drawable.default_poster))
                      .into(poster)
 
-             title.text = anime?.info?.title
-             type.text = anime?.info?.getTypeText
-             tvStatus.text = anime?.info?.getStatusText
-             ageRating.text = anime?.info?.age_rating
-             synopsis.text = anime?.info?.synopsis
+             title?.text = anime?.info?.title
+             type?.text = anime?.info?.getTypeText
+             tvStatus?.text = anime?.info?.getStatusText
+             ageRating?.text = anime?.info?.age_rating
+             synopsis?.text = anime?.info?.synopsis
          }
     }
 }
