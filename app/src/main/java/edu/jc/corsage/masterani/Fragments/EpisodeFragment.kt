@@ -68,9 +68,18 @@ class EpisodeFragment : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelableArrayList("EPISODES", episodeAdapter?.episodeList as ArrayList<DetailedEpisode>)
-        outState?.putInt("EPISODE_LENGTH", episode_length as Int)
-        outState?.putString("SLUG", slug)
+
+        if (outState != null) {
+            if (!outState.containsKey("EPISODES")) {
+                outState.putParcelableArrayList("EPISODES", episodeAdapter?.episodeList as ArrayList<DetailedEpisode>)
+            }
+            if (!outState.containsKey("EPISODE_LENGTH")) {
+                outState.putInt("EPISODE_LENGTH", episode_length as Int)
+            }
+            if (!outState.containsKey("SLUG")) {
+                outState.putString("SLUG", slug)
+            }
+        }
     }
 
     override fun onDestroy() {

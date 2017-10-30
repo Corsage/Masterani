@@ -80,7 +80,11 @@ class AnimeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable("ANIME", anime)
+        if (outState != null) {
+            if (!outState.containsKey("ANIME")) {
+                outState.putParcelable("ANIME", anime)
+            }
+        }
     }
 
     override fun onDestroy() {

@@ -130,9 +130,18 @@ class HomeFragment : Fragment(), View.OnClickListener, SwipeRefreshLayout.OnRefr
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelableArrayList("newestEps", episodeAdapter?.releases)
-        outState?.putParcelableArrayList("popularToday", popularTodayAdapter?.releases)
-        outState?.putParcelableArrayList("beingWatched", beingWatchedAdapter?.releases)
+
+        if (outState != null) {
+            if (!outState.containsKey("newestEps")) {
+                outState.putParcelableArrayList("newestEps", episodeAdapter?.releases)
+            }
+            if (!outState.containsKey("popularToday")) {
+                outState.putParcelableArrayList("popularToday", popularTodayAdapter?.releases)
+            }
+            if (!outState.containsKey("beingWatched")) {
+                outState.putParcelableArrayList("beingWatched", beingWatchedAdapter?.releases)
+            }
+        }
     }
 
     override fun onDestroy() {
