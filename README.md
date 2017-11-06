@@ -20,10 +20,15 @@ Example JSON response from the server:
 ```
 
 ## Screenshots
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+<img align="left" src="https://i.imgur.com/r2KiSSJ.jpg" width="270" height="480"/>
+<img align="left" src="https://i.imgur.com/j1rKvfP.jpg" width="270" height="480"/>
+<img align="left" src="https://i.imgur.com/WKmRmu0.jpg" width="270" height="480"/>
+<img align="center" src="https://i.imgur.com/v7IjgiP.jpg" width="270" height="480"/>
+
+
 
 ## TODO
-This is a work in progress, and this release only contains the most basic of features. Some possible implementations include:
+This is a work in progress, and this release only contains the most basic of features. Some **future possible implementations** include:
 * MyAnimeList (MAL) Integration
 * Kitsu Integration
 * Chromecast Support
