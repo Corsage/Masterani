@@ -7,11 +7,20 @@ This project could not be done without [Masterani.me](https://www.masterani.me).
 Only thing I've done is create a simple Node.js server that takes episode links and properly formats them/scrapes the direct link if applicable.  
   
 Example JSON response from the server:
-  
-`xd`
+ 
+```json
+[
+    {
+        "id": 1,
+        "name": "MP4Upload",
+        "quality": 480,
+        "link": "https://www10.mp4upload.com:282/d/rox3rc27z3b4quuolguuqokmcsejrewt27d6w56j3ngfnexajamlnaaz/Naruto - 001 - Enter Naruto Uzumaki! [DarkDream].mp4"
+    }
+]
+```
 
 ## Screenshots
-
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 
 ## TODO
 This is a work in progress, and this release only contains the most basic of features. Some possible implementations include:
@@ -20,8 +29,11 @@ This is a work in progress, and this release only contains the most basic of fea
 * Chromecast Support
 * Android 4.4.2 Support
 * Optimizations and Memory Management Improvements
+* Cache objects
+* Check if no internet
 * Reformating the Video Player
 * Allow Setting for Users to pick a Source
+* Add Setting for Quality Preference (1080, 720, 420)
 * Finish the Algorithm for Finding the Best Link (Currently justs chooses the first one supported)
 * Finish Sorting
 * Fix Timing/Date issues for Localization
