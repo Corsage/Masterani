@@ -1,7 +1,7 @@
 # Masterani
 A good(?) android app to watch anime.
 
-# Credits
+## Credits
 This project could not be done without [Masterani.me](https://www.masterani.me). At the end of the day, all the information in the app is from them.  
   
 Only thing I've done is create a simple Node.js server that takes episode links and properly formats them/scrapes the direct link if applicable.  
