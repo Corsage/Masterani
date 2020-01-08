@@ -1,6 +1,10 @@
 # Masterani
 A good(?) android app to watch anime.
 
+# DEPRECATED
+
+Please note that this android app no longer works as Masterani.me is no longer in service. I will eventually make a similar app that uses my own data.
+
 ## Credits
 This project could not be done without [Masterani.me](https://www.masterani.me). At the end of the day, all the information in the app is from them.  
   
